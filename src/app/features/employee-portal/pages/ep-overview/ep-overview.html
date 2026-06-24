@@ -1,0 +1,109 @@
+<div class="ep-overview">
+  <!-- Welcome Header -->
+  <div class="welcome-banner">
+    <div class="welcome-text">
+      <h1>{{ getGreeting() }}, {{ username }}! 👋</h1>
+      <p>Here's a snapshot of your work status and recent activity.</p>
+    </div>
+    <div class="today-date">
+      <span class="date-label">Today</span>
+      <span class="date-value">{{ today | date:'fullDate' }}</span>
+    </div>
+  </div>
+
+  @if (isLoading) {
+    <div class="loading-grid">
+      @for (i of [1,2,3,4]; track i) {
+        <div class="skeleton-card"></div>
+      }
+    </div>
+  } @else {
+
+  <!-- Stat Cards -->
+  <div class="stats-grid">
+    <div class="stat-card green">
+      <div class="stat-icon">📅</div>
+      <div class="stat-info">
+        <span class="stat-label">Days Present</span>
+        <span class="stat-value">{{ stats?.employeeTotalPresentDaysCount ?? '--' }}</span>
+        <span class="stat-sub">This month</span>
+      </div>
+    </div>
+
+    <div class="stat-card amber">
+      <div class="stat-icon">📋</div>
+      <div class="stat-info">
+        <span class="stat-label">Leaves Taken</span>
+        <span class="stat-value">{{ stats?.employeeLeaveCount ?? '--' }}</span>
+        <span class="stat-sub">Total approved</span>
+      </div>
+    </div>
+
+    <div class="stat-card blue">
+      <div class="stat-icon">⏳</div>
+      <div class="stat-info">
+        <span class="stat-label">Pending Requests</span>
+        <span class="stat-value">{{ stats?.pendingLeaveRequests ?? '--' }}</span>
+        <span class="stat-sub">Awaiting approval</span>
+      </div>
+    </div>
+
+    <div class="stat-card purple">
+      <div class="stat-icon">💰</div>
+      <div class="stat-info">
+        <span class="stat-label">Last Salary</span>
+        <span class="stat-value">₹{{ stats?.lastMonthsNetSalary ?? '--' }}</span>
+        <span class="stat-sub">Previous month</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Secondary Stats Row -->
+  <div class="secondary-row">
+    <div class="info-card">
+      <h3>⏰ Working Hours</h3>
+      <div class="info-value">{{ stats?.averageWorkingHours ?? '--' }} hrs</div>
+      <p>Average per day</p>
+    </div>
+    <div class="info-card">
+      <h3>🌅 Late Check-ins</h3>
+      <div class="info-value warn">{{ stats?.employeeLateCheckinsCount ?? '--' }}</div>
+      <p>This month</p>
+    </div>
+    <div class="info-card">
+      <h3>📆 Remaining Leaves</h3>
+      <div class="info-value success">{{ stats?.remainingLeaves ?? '--' }}</div>
+      <p>Available balance</p>
+    </div>
+    <div class="info-card">
+      <h3>💸 Deductions</h3>
+      <div class="info-value danger">₹{{ stats?.deductions ?? '--' }}</div>
+      <p>Last month</p>
+    </div>
+  </div>
+
+  <!-- Quick Links -->
+  <div class="quick-links">
+    <h2>Quick Actions</h2>
+    <div class="links-grid">
+      <a routerLink="/employee-portal/leaves" class="quick-link-card">
+        <span class="link-icon">📝</span>
+        <span>Apply for Leave</span>
+      </a>
+      <a routerLink="/employee-portal/attendance" class="quick-link-card">
+        <span class="link-icon">📊</span>
+        <span>View Attendance</span>
+      </a>
+      <a routerLink="/employee-portal/salary" class="quick-link-card">
+        <span class="link-icon">💳</span>
+        <span>View Salary Slips</span>
+      </a>
+      <a routerLink="/employee-portal/profile" class="quick-link-card">
+        <span class="link-icon">👤</span>
+        <span>My Profile</span>
+      </a>
+    </div>
+  </div>
+
+  }
+</div>

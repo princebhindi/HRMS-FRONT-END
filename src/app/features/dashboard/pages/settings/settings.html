@@ -1,0 +1,130 @@
+<div class="settings-container">
+  <div class="settings-header">
+    <h1>System Settings</h1>
+    <p>Configure general system parameters, preference themes, and notification triggers.</p>
+  </div>
+
+  <div class="settings-grid-layout">
+    <form (submit)="$event.preventDefault(); saveSettings()" class="settings-form">
+      
+      <!-- Section 1: General Settings -->
+      <div class="settings-section-card">
+        <div class="section-title">
+          <span class="section-icon">⚙️</span>
+          <h2>General Configurations</h2>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="systemName">Application Portal Name</label>
+            <input 
+              type="text" 
+              id="systemName" 
+              [(ngModel)]="settings.systemName" 
+              name="systemName"
+              placeholder="e.g. HRMS Portal"
+              required 
+            />
+            <small class="help-text">This name determines the logo brand tag displayed in the navbar.</small>
+          </div>
+          
+          <div class="form-group">
+            <label for="timezone">Default Timezone</label>
+            <select id="timezone" [(ngModel)]="settings.timezone" name="timezone">
+              <option value="UTC+00:00">Greenwich Mean Time (GMT/UTC)</option>
+              <option value="UTC+05:30">India Standard Time (IST) - UTC+05:30</option>
+              <option value="UTC+01:00">Central European Time (CET) - UTC+01:00</option>
+              <option value="UTC-05:00">Eastern Standard Time (EST) - UTC-05:00</option>
+            </select>
+            <small class="help-text">Used for timestamp offsets across logs and notices.</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Preferences -->
+      <div class="settings-section-card">
+        <div class="section-title">
+          <span class="section-icon">🎨</span>
+          <h2>Aesthetic Preferences</h2>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Interface Theme Mode</label>
+            <div class="theme-picker">
+              <label class="theme-option" [class.selected]="settings.theme === 'light'">
+                <input 
+                  type="radio" 
+                  name="theme" 
+                  value="light" 
+                  [(ngModel)]="settings.theme" 
+                  (change)="applyTheme('light')"
+                />
+                <span class="option-card">
+                  <span class="option-icon">☀️</span>
+                  <span class="option-text">Light Mode</span>
+                </span>
+              </label>
+              <label class="theme-option" [class.selected]="settings.theme === 'dark'">
+                <input 
+                  type="radio" 
+                  name="theme" 
+                  value="dark" 
+                  [(ngModel)]="settings.theme" 
+                  (change)="applyTheme('dark')"
+                />
+                <span class="option-card">
+                  <span class="option-icon">🌙</span>
+                  <span class="option-text">Dark Mode</span>
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="pageSize">Default Table Page Size</label>
+            <select id="pageSize" [(ngModel)]="settings.defaultPageSize" name="defaultPageSize">
+              <option [ngValue]="5">5 records per page</option>
+              <option [ngValue]="10">10 records per page</option>
+              <option [ngValue]="20">20 records per page</option>
+              <option [ngValue]="50">50 records per page</option>
+            </select>
+            <small class="help-text">Default pagination size across employees, notices, and logs.</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Notification Triggers -->
+      <div class="settings-section-card">
+        <div class="section-title">
+          <span class="section-icon">🔔</span>
+          <h2>Alerts & Notifications</h2>
+        </div>
+        <div class="notification-switch-group">
+          <div class="switch-meta">
+            <span class="switch-label">Email Notifications</span>
+            <p class="switch-desc">Receive automated notification summaries for pending leave requests and notices.</p>
+          </div>
+          <label class="toggle-switch">
+            <input 
+              type="checkbox" 
+              [(ngModel)]="settings.emailNotifications" 
+              name="emailNotifications" 
+            />
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Submit Block -->
+      <div class="form-actions-bar">
+        <button type="submit" class="save-settings-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+          <span>Save Changes</span>
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

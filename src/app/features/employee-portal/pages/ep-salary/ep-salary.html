@@ -1,0 +1,57 @@
+<div class="ep-page">
+  <div class="page-header">
+    <div>
+      <h1>My Salary</h1>
+      <p>View your monthly salary slips and payment history.</p>
+    </div>
+  </div>
+
+  @if (isLoading) {
+    <div class="loading-state"><div class="spinner"></div><p>Loading salary data...</p></div>
+  } @else if (salaryList.length === 0) {
+    <div class="empty-state">
+      <span class="empty-icon">💳</span>
+      <p>No salary records found for your account.</p>
+    </div>
+  } @else {
+    <div class="salary-cards">
+      @for (slip of salaryList; track slip.id) {
+        <div class="salary-slip-card">
+          <div class="slip-header">
+            <div class="slip-month">
+              <span class="month-name">{{ getMonthName(slip.month) }}</span>
+              <span class="month-year">{{ slip.year }}</span>
+            </div>
+            <span class="net-salary">₹{{ slip.inHandSalary | number }}</span>
+          </div>
+          <div class="slip-body">
+            <div class="slip-row">
+              <span class="slip-label">Base Salary</span>
+              <span class="slip-value">₹{{ slip.baseSalary | number }}</span>
+            </div>
+            <div class="slip-row">
+              <span class="slip-label">HRA</span>
+              <span class="slip-value positive">+ ₹{{ slip.hra | number }}</span>
+            </div>
+            <div class="slip-row">
+              <span class="slip-label">Deductions</span>
+              <span class="slip-value negative">- ₹{{ slip.deductions | number }}</span>
+            </div>
+            <div class="slip-divider"></div>
+            <div class="slip-row total">
+              <span class="slip-label">In-Hand Salary</span>
+              <span class="slip-value total-value">₹{{ slip.inHandSalary | number }}</span>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+      <button (click)="prevPage()" [disabled]="currentPage === 1" class="page-btn">← Prev</button>
+      <span class="page-info">Page {{ currentPage }}</span>
+      <button (click)="nextPage()" [disabled]="!hasNextPage" class="page-btn">Next →</button>
+    </div>
+  }
+</div>

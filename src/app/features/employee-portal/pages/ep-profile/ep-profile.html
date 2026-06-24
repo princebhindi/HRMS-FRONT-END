@@ -1,0 +1,44 @@
+<div class="ep-page">
+  <div class="page-header">
+    <div>
+      <h1>My Profile</h1>
+      <p>View and manage your account credentials.</p>
+    </div>
+  </div>
+
+  @if (isLoading) {
+    <div class="loading-state"><div class="spinner"></div><p>Loading profile...</p></div>
+  } @else if (errorMessage) {
+    <div class="empty-state"><span class="empty-icon">⚠️</span><p>{{ errorMessage }}</p></div>
+  } @else if (userProfile) {
+    <div class="profile-card">
+      <div class="profile-banner">
+        <div class="profile-avatar">{{ userProfile.userName?.substring(0,1).toUpperCase() }}</div>
+        <div class="profile-meta">
+          <h2>{{ userProfile.userName }}</h2>
+          <span class="badge-role">{{ userProfile.role || 'Employee' }}</span>
+        </div>
+      </div>
+
+      <form class="profile-form" (submit)="$event.preventDefault(); updateProfile()">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Username</label>
+            <input type="text" [value]="userProfile.userName" disabled />
+          </div>
+          <div class="form-group">
+            <label>System Role</label>
+            <input type="text" [value]="userProfile.role || 'Employee'" disabled />
+          </div>
+          <div class="form-group full">
+            <label for="newPassword">Change Password</label>
+            <input type="password" id="newPassword" [(ngModel)]="userProfile.password" name="password" placeholder="Enter new password" />
+          </div>
+        </div>
+        <div class="form-footer">
+          <button type="submit" class="save-btn">💾 Save Changes</button>
+        </div>
+      </form>
+    </div>
+  }
+</div>

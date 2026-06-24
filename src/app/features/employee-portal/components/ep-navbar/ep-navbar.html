@@ -1,0 +1,27 @@
+<nav class="ep-navbar">
+  <!-- Left: Brand -->
+  <div class="nav-left">
+    <span class="brand-logo">{{ systemName }}</span>
+    <span class="app-tag ep-tag">Employee Portal</span>
+  </div>
+
+  <!-- Right: User Profile & Logout -->
+  <div class="nav-right">
+    <div class="user-profile">
+      <div class="avatar">{{ getAvatarText() }}</div>
+      <div class="user-info">
+        <span class="username">{{ username }}</span>
+        <span class="role">{{ role }}</span>
+      </div>
+    </div>
+    <button class="logout-btn" (click)="onLogout()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+        <polyline points="16 17 21 12 16 7" />
+        <line x1="21" y1="12" x2="9" y2="12" />
+      </svg>
+      <span class="btn-text">Logout</span>
+    </button>
+  </div>
+</nav>

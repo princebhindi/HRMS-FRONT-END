@@ -1,0 +1,79 @@
+<nav class="navbar">
+  <!-- Left Side: Brand Logo / Toggle -->
+  <div class="nav-left">
+    <span class="brand-logo">{{ systemName }}</span>
+    <span class="app-tag">Dashboard</span>
+  </div>
+
+  <!-- Center Side: Global Search Bar -->
+  <div class="nav-center">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" [value]="searchQuery" (input)="onSearch($event)" (blur)="closeResults()" placeholder="Search employees, departments, notices..." />
+      
+      <!-- Search Results Dropdown Overlay -->
+      @if (showResults) {
+      <div class="search-results-overlay">
+        @if (filteredEmployees.length > 0) {
+        <div class="search-group">
+          <div class="group-title">Employees</div>
+          @for (emp of filteredEmployees; track emp.id) {
+          <div class="search-item" (click)="selectResult('/dashboard/employees')">
+            <div class="item-name">{{ emp.name }} {{ emp.lastName || '' }}</div>
+            <div class="item-sub">{{ emp.email }}</div>
+          </div>
+          }
+        </div>
+        }
+        
+        @if (filteredDepartments.length > 0) {
+        <div class="search-group">
+          <div class="group-title">Departments</div>
+          @for (dept of filteredDepartments; track dept.id) {
+          <div class="search-item" (click)="selectResult('/dashboard/departments')">
+            <div class="item-name">{{ dept.name || dept.departmentName }}</div>
+          </div>
+          }
+        </div>
+        }
+
+        @if (filteredNotices.length > 0) {
+        <div class="search-group">
+          <div class="group-title">Notices</div>
+          @for (not of filteredNotices; track not.id) {
+          <div class="search-item" (click)="selectResult('/dashboard/notices')">
+            <div class="item-name">{{ not.title }}</div>
+            <div class="item-sub">{{ not.content | slice:0:40 }}...</div>
+          </div>
+          }
+        </div>
+        }
+      </div>
+      }
+    </div>
+  </div>
+
+  <!-- Right Side: Actions & User Profile -->
+  <div class="nav-right">
+    <!-- Notification Badge -->
+    <button class="nav-btn" aria-label="Notifications">
+      <span class="icon">🔔</span>
+      <span class="badge">3</span>
+    </button>
+
+    <!-- User Profile Dropdown Anchor -->
+    <div class="user-profile">
+      <div class="avatar">{{ getAvatarText() }}</div>
+      <div class="user-info">
+        <span class="username">{{user}}</span>
+        <span class="role">{{role}}</span>
+      </div>
+    </div>
+
+    <!-- Logout Button -->
+    <button class="logout-btn" (click)="onLogout()">
+      <span class="icon">🚪</span>
+      <span class="btn-text">Logout</span>
+    </button>
+  </div>
+</nav>

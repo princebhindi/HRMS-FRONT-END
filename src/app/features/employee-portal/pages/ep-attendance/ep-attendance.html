@@ -1,0 +1,53 @@
+<div class="ep-page">
+  <div class="page-header">
+    <div>
+      <h1>My Attendance</h1>
+      <p>Your personal attendance records and work hours.</p>
+    </div>
+  </div>
+
+  @if (isLoading) {
+    <div class="loading-state"><div class="spinner"></div><p>Loading attendance...</p></div>
+  } @else if (attendanceList.length === 0) {
+    <div class="empty-state">
+      <span class="empty-icon">📭</span>
+      <p>No attendance records found for your account.</p>
+    </div>
+  } @else {
+    <div class="table-card">
+      <table class="ep-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Date</th>
+            <th>Check In</th>
+            <th>Check Out</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (log of attendanceList; track log.id; let i = $index) {
+            <tr>
+              <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+              <td>{{ log.date | date:'mediumDate' }}</td>
+              <td>{{ log.checkInTime || '--' }}</td>
+              <td>{{ log.checkOutTime || '--' }}</td>
+              <td>
+                <span class="status-badge {{ getStatusClass(log.status) }}">
+                  {{ log.status || 'Unknown' }}
+                </span>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+      <button (click)="prevPage()" [disabled]="currentPage === 1" class="page-btn">← Prev</button>
+      <span class="page-info">Page {{ currentPage }}</span>
+      <button (click)="nextPage()" [disabled]="!hasNextPage" class="page-btn">Next →</button>
+    </div>
+  }
+</div>

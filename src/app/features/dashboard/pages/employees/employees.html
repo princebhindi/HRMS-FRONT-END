@@ -1,0 +1,131 @@
+<div class="employees-container">
+  <!-- Header Section -->
+  <header class="employees-header">
+    <div class="header-title-area">
+      <h1>Employee Directory</h1>
+      <p>View, add, edit, or remove employee profiles.</p>
+    </div>
+    <div class="header-actions" *ngIf="!showForm">
+      <button class="action-btn primary-action" (click)="openAddForm()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+        <span>Add New Employee</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Add/Edit Form Card (Toggled) -->
+  <div class="form-card" *ngIf="showForm">
+    <div class="form-header">
+      <h2>{{ isEditMode ? 'Edit Employee Details' : 'Register New Employee' }}</h2>
+      <button class="close-btn" (click)="closeForm()" aria-label="Close Form">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+    <form (ngSubmit)="saveEmployee()" class="employee-form-grid">
+      <div class="form-group">
+        <label for="name">First Name <span class="required">*</span></label>
+        <input type="text" id="name" name="name" [(ngModel)]="employeeForm.name" required placeholder="e.g. Rahul">
+      </div>
+      <div class="form-group">
+        <label for="lastName">Last Name</label>
+        <input type="text" id="lastName" name="lastName" [(ngModel)]="employeeForm.lastName" placeholder="e.g. Sharma">
+      </div>
+      <div class="form-group">
+        <label for="email">Email Address <span class="required">*</span></label>
+        <input type="email" id="email" name="email" [(ngModel)]="employeeForm.email" required placeholder="e.g. rahul.sharma@company.com">
+      </div>
+      <div class="form-group">
+        <label for="mobile">Mobile Number</label>
+        <input type="text" id="mobile" name="mobile" [(ngModel)]="employeeForm.mobile" placeholder="e.g. +91 9876543210">
+      </div>
+      <div class="form-group full-width">
+        <label for="deptId">Department Assignment</label>
+        <select id="deptId" name="deptId" [(ngModel)]="employeeForm.deptId">
+          <option value="">Unassigned</option>
+          <option *ngFor="let dept of departmentsList" [value]="dept.id">{{ dept.name || dept.departmentName }}</option>
+        </select>
+      </div>
+      <div class="form-actions full-width">
+        <button type="button" class="btn btn-cancel" (click)="closeForm()">Cancel</button>
+        <button type="submit" class="btn btn-save">{{ isEditMode ? 'Update Profile' : 'Save Employee' }}</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Employees Table List Card -->
+  <div class="employees-card" *ngIf="!showForm">
+    <div class="table-wrapper">
+      <table class="employees-table">
+        <thead>
+          <tr>
+            <th>Employee</th>
+            <th>Contact</th>
+            <th>Department</th>
+            <th>Registered Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let emp of employeesList">
+            <td>
+              <div class="emp-profile">
+                <div class="avatar">{{ emp.name?.substring(0, 2) || 'EE' }}</div>
+                <div class="emp-details">
+                  <span class="emp-name">{{ emp.name }} {{ emp.lastName }}</span>
+                  <span class="emp-email">{{ emp.email }}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <span class="contact-number">{{ emp.mobile || 'No contact number' }}</span>
+            </td>
+            <td>
+              <span class="dept-badge">{{ getDepartmentName(emp.deptId) }}</span>
+            </td>
+            <td>
+              <span class="reg-date">{{ emp.onCreate | date:'MMM dd, yyyy' }}</span>
+            </td>
+            <td>
+              <div class="action-buttons">
+                <button class="action-btn edit" (click)="openEditForm(emp)" title="Edit Employee">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="16 3 21 8 8 21 3 21 3 16 16 3"></polygon></svg>
+                  Edit
+                </button>
+                <button class="action-btn delete" (click)="deleteEmployee(emp.id)" title="Delete Employee">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                  Delete
+                </button>
+              </div>
+            </td>
+          </tr>
+          
+          <!-- Empty State fallback -->
+          <tr *ngIf="employeesList.length === 0">
+            <td colspan="5" class="empty-row">
+              <div class="empty-state">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="empty-icon"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <h3>No Employees Registered</h3>
+                <p>Register a new employee profile to begin.</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="pagination-footer" *ngIf="employeesList.length > 0">
+      <span class="pagination-info">Page {{ currentPage }}</span>
+      <div class="pagination-actions">
+        <button class="pag-btn" [disabled]="currentPage === 1" (click)="prevPage()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          Previous
+        </button>
+        <button class="pag-btn" [disabled]="!hasNextPage" (click)="nextPage()">
+          Next
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

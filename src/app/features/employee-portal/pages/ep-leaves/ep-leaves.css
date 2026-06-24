@@ -1,0 +1,45 @@
+/* ep-leaves.css inherits from shared patterns */
+.ep-page { padding: 28px 32px; }
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+.page-header h1 { font-size: 26px; font-weight: 700; color: #0f172a; margin-bottom: 4px; }
+.page-header p { color: #64748b; font-size: 14px; }
+.loading-state, .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; background: #fff; border-radius: 14px; border: 1px solid #e2e8f0; text-align: center; }
+.spinner { width: 36px; height: 36px; border: 3px solid #f1f5f9; border-top-color: #10b981; border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 14px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.empty-icon { font-size: 36px; margin-bottom: 10px; }
+.empty-state p, .loading-state p { color: #64748b; font-size: 14px; }
+.table-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+.ep-table { width: 100%; border-collapse: collapse; }
+.ep-table th { background-color: #f8fafc; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; padding: 12px 16px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+.ep-table td { padding: 13px 16px; font-size: 13px; color: #374151; border-bottom: 1px solid #f1f5f9; }
+.ep-table tr:last-child td { border-bottom: none; }
+.ep-table tr:hover td { background-color: #f8fafc; }
+.status-badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; text-transform: capitalize; }
+.approved { background-color: #d1fae5; color: #065f46; }
+.rejected { background-color: #fee2e2; color: #991b1b; }
+.pending { background-color: #fef3c7; color: #92400e; }
+.pagination { display: flex; justify-content: center; align-items: center; gap: 14px; margin-top: 20px; }
+.page-btn { padding: 7px 16px; border: 1px solid #d1d5db; background: #fff; border-radius: 7px; font-size: 13px; font-weight: 500; cursor: pointer; color: #374151; transition: all 0.2s; }
+.page-btn:hover:not(:disabled) { background-color: #f0fdf4; border-color: #10b981; color: #065f46; }
+.page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.page-info { font-size: 13px; font-weight: 600; color: #374151; }
+.apply-btn { padding: 9px 18px; background-color: #10b981; color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background-color 0.2s; white-space: nowrap; }
+.apply-btn:hover { background-color: #059669; }
+.leave-form-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 24px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+.leave-form-card h3 { font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 18px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group.full { margin-top: 14px; }
+.form-group label { font-size: 12px; font-weight: 600; color: #475569; }
+.form-group input, .form-group textarea { padding: 9px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 13px; color: #1f2937; outline: none; background: #fff; transition: border-color 0.2s; resize: vertical; }
+.form-group input:focus, .form-group textarea:focus { border-color: #10b981; box-shadow: 0 0 0 3px rgba(16,185,129,0.15); }
+.form-actions { display: flex; justify-content: flex-end; margin-top: 16px; }
+.submit-btn { padding: 10px 20px; background-color: #10b981; color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background-color 0.2s; }
+.submit-btn:hover:not(:disabled) { background-color: #059669; }
+.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }

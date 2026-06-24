@@ -1,0 +1,218 @@
+<div class="overview-container">
+  <!-- Welcome Header -->
+  <header class="overview-header">
+    <div class="welcome-text">
+      <h1>HRMS Dashboard</h1>
+      <p>Manage employee records, attendance tracking, leave requests, and notices.</p>
+    </div>
+    <div class="header-actions">
+      <button class="action-btn primary-action" [routerLink]="['/dashboard/employees']" [queryParams]="{ openAdd: 'true' }">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+          <circle cx="8.5" cy="7" r="4" />
+          <line x1="20" y1="8" x2="20" y2="14" />
+          <line x1="23" y1="11" x2="17" y2="11" />
+        </svg>
+        <span>Add Employee</span>
+      </button>
+      <button class="action-btn secondary-action" [routerLink]="['/dashboard/notices']" [queryParams]="{ openAdd: 'true' }">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+          <line x1="16" y1="2" x2="16" y2="6" />
+          <line x1="8" y1="2" x2="8" y2="6" />
+          <line x1="3" y1="10" x2="21" y2="10" />
+        </svg>
+        <span>Post Notice</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Quick Stats Grid -->
+  <section class="stats-grid">
+    <!-- Stat Card 1: Total Employees -->
+    <div class="stat-card">
+      <div class="card-icon employee-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+        </svg>
+      </div>
+      <div class="card-details">
+        <span class="card-title">Total Employees</span>
+        <h3 class="card-value">{{ dashboard?.totalEmployees || 0 }}</h3>
+        <span class="card-trend status-info">
+          In {{ dashboard?.totalDepartments || 0 }} departments
+        </span>
+      </div>
+    </div>
+
+    <!-- Stat Card 2: Attendance Today -->
+    <div class="stat-card">
+      <div class="card-icon attendance-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+          <polyline points="22 4 12 14.01 9 11.01" />
+        </svg>
+      </div>
+      <div class="card-details">
+        <span class="card-title">Attendance Today</span>
+        <h3 class="card-value">{{ dashboard?.todayAttendancePercentage || 0 }}%</h3>
+        <span class="card-trend upward">
+          Rate of presence today
+        </span>
+      </div>
+    </div>
+
+    <!-- Stat Card 3: Pending Leaves -->
+    <div class="stat-card">
+      <div class="card-icon leave-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+          <line x1="16" y1="2" x2="16" y2="6" />
+          <line x1="8" y1="2" x2="8" y2="6" />
+          <line x1="3" y1="10" x2="21" y2="10" />
+        </svg>
+      </div>
+      <div class="card-details">
+        <span class="card-title">Pending Leaves</span>
+        <h3 class="card-value">{{ dashboard?.pendingLeavesCount || 0 }}</h3>
+        <span class="card-trend status-action">
+          Requires review/approval
+        </span>
+      </div>
+    </div>
+
+    <!-- Stat Card 4: Active Notices -->
+    <div class="stat-card">
+      <div class="card-icon notice-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+          <line x1="12" y1="9" x2="12" y2="13" />
+          <line x1="12" y1="17" x2="12.01" y2="17" />
+        </svg>
+      </div>
+      <div class="card-details">
+        <span class="card-title">Active Notices</span>
+        <h3 class="card-value">{{ dashboard?.activeNoticesCount || 0 }}</h3>
+        <span class="card-trend status-info">
+          Published notice board count
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Visual/Lists Section (Grid 2 columns) -->
+  <div class="main-sections-grid">
+    <!-- Today's Attendance Logs -->
+    <div class="section-card">
+      <div class="section-header">
+        <h2>Today's Attendance Logs</h2>
+        <a class="view-all-link" routerLink="/dashboard/attendance">View Logs</a>
+      </div>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Employee</th>
+              <th>Check In</th>
+              <th>Check Out</th>
+              <th>Total Hours</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (att of todayAttendanceList; track att.id) {
+            <tr>
+              <td>
+                <div class="employee-name-wrapper">
+                  <div class="avatar-sm">{{ att.employee?.name?.substring(0, 2) || 'EE' }}</div>
+                  <div>
+                    <span class="name-bold">{{ att.employee?.name }} {{ att.employee?.lastName || '' }}</span>
+                    <span class="employee-dept">{{ getDepartmentName(att.employee?.deptId) }}</span>
+                  </div>
+                </div>
+              </td>
+              <td><span class="time-badge in">{{ (att.checkInTime | date:'hh:mm a') || '-' }}</span></td>
+              <td><span class="time-badge out">{{ (att.checkOutTime | date:'hh:mm a') || '-' }}</span></td>
+              <td>{{ att.totalHours ? (att.totalHours | number:'1.1-2') + ' hrs' : '-' }}</td>
+              <td>
+                <span class="status-badge" [ngClass]="{
+                  'badge-present': att.status === 'Present',
+                  'badge-absent': att.status === 'Absent',
+                  'badge-leave': att.status === 'On Leave',
+                  'badge-late': att.status === 'Late'
+                }">
+                  {{ att.status || 'Present' }}
+                </span>
+              </td>
+            </tr>
+            } @empty {
+            <tr>
+              <td colspan="5" class="empty-row" style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                No attendance logs recorded for today.
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Right Side Widget: Pending Leaves & Notice Board -->
+    <div class="widgets-wrapper">
+      <!-- Pending Leaves Widget -->
+      <div class="section-card">
+        <div class="section-header">
+          <h2>Pending Leave Requests</h2>
+          <a class="view-all-link" routerLink="/dashboard/leaves">Review All</a>
+        </div>
+        <div class="leave-list">
+          @for (req of leaveRequest; track req.id) {
+          <div class="leave-item">
+            <div class="leave-info">
+              <span class="leave-emp-name">{{req.employee?.name}}</span>
+              <span class="leave-date-range">{{ req.startDate | date:'MMM dd, yyyy' }} - {{ req.endDate | date:'MMM
+                dd, yyyy' }}</span>
+            </div>
+            <span class="leave-reason">{{ req.reason }}</span>
+            <div class="leave-actions">
+              <button class="leave-btn approve" (click)="approvedLeave(req.id)">Approve</button>
+              <button class="leave-btn reject" (click)="rejectedLeave(req.id)">Reject</button>
+            </div>
+          </div>
+          } @empty {
+          <div class="no-leaves">No pending leave requests</div>
+          }
+        </div>
+      </div>
+
+      <!-- Notice Board Widget -->
+      <div class="section-card notice-widget">
+        <div class="section-header">
+          <h2>Company Notice Board</h2>
+        </div>
+        <div class="notice-list">
+          @for (not of noticesList; track not.id) {
+          <div class="notice-item" [ngClass]="not.targetDepartmentId ? 'general' : 'critical'">
+            <div class="notice-badge">{{ not.targetDepartmentId ? getDepartmentName(not.targetDepartmentId) : 'All' }}</div>
+            <div class="notice-body">
+              <span class="notice-title">{{ not.title }}</span>
+              <p class="notice-desc">{{ not.content }}</p>
+            </div>
+          </div>
+          } @empty {
+          <div class="no-leaves">No active notices published</div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

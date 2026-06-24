@@ -1,0 +1,143 @@
+<div class="salaries-container">
+  <!-- Header Section -->
+  <header class="salaries-header">
+    <div class="header-title-area">
+      <h1>Payroll Management</h1>
+      <p>Configure employee salaries, allowances, deductions, and payouts.</p>
+    </div>
+    <div class="header-actions" *ngIf="!showForm">
+      <button class="action-btn primary-action" (click)="openAddForm()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12" y2="18"></line><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+        <span>Add Payroll Record</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Add/Edit Form Card -->
+  <div class="form-card" *ngIf="showForm">
+    <div class="form-header">
+      <h2>{{ isEditMode ? 'Modify Payroll Record' : 'Log Payroll Record' }}</h2>
+      <button class="close-btn" (click)="closeForm()" aria-label="Close Form">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+    <form (ngSubmit)="saveSalary()" class="salary-form-grid">
+      <div class="form-group">
+        <label for="empId">Select Employee <span class="required">*</span></label>
+        <select id="empId" name="empId" [(ngModel)]="salaryForm.empId" required [disabled]="isEditMode">
+          <option value="" disabled selected>Choose Employee...</option>
+          <option *ngFor="let emp of employeesList" [value]="emp.id">{{ emp.name }} {{ emp.lastName }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="baseSalary">Base Salary (INR) <span class="required">*</span></label>
+        <input type="number" id="baseSalary" name="baseSalary" [(ngModel)]="salaryForm.baseSalary" (input)="calculateInHand()" required placeholder="e.g. 50000">
+      </div>
+      <div class="form-group">
+        <label for="hra">House Rent Allowance (HRA) (INR)</label>
+        <input type="number" id="hra" name="hra" [(ngModel)]="salaryForm.hra" (input)="calculateInHand()" placeholder="e.g. 15000">
+      </div>
+      <div class="form-group">
+        <label for="deductions">Deductions (INR)</label>
+        <input type="number" id="deductions" name="deductions" [(ngModel)]="salaryForm.deductions" (input)="calculateInHand()" placeholder="e.g. 5000">
+      </div>
+      <div class="form-group">
+        <label for="month">Payout Month <span class="required">*</span></label>
+        <select id="month" name="month" [(ngModel)]="salaryForm.month" required>
+          <option *ngFor="let m of months; let i = index" [value]="i+1">{{ m }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="year">Payout Year <span class="required">*</span></label>
+        <input type="number" id="year" name="year" [(ngModel)]="salaryForm.year" required>
+      </div>
+      <div class="form-group full-width computed-group">
+        <label>Computed Net In-Hand Salary:</label>
+        <div class="in-hand-amount">₹{{ salaryForm.inHandSalary | number:'1.2-2' }}</div>
+      </div>
+      <div class="form-actions full-width">
+        <button type="button" class="btn btn-cancel" (click)="closeForm()">Cancel</button>
+        <button type="submit" class="btn btn-save">{{ isEditMode ? 'Update Payroll' : 'Save Payroll' }}</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Salaries Table List Card -->
+  <div class="salaries-card" *ngIf="!showForm">
+    <div class="table-wrapper">
+      <table class="salaries-table">
+        <thead>
+          <tr>
+            <th>Employee</th>
+            <th>Payout Period</th>
+            <th>Base Salary</th>
+            <th>Allowance (HRA)</th>
+            <th>Deductions</th>
+            <th>Net In-Hand</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let sal of salariesList">
+            <td>
+              <span class="emp-name-text">{{ getEmployeeName(sal) }}</span>
+            </td>
+            <td>
+              <span class="period-text">{{ getMonthName(sal.month) }} {{ sal.year }}</span>
+            </td>
+            <td>
+              <span class="amount-val">₹{{ sal.baseSalary | number:'1.2-2' }}</span>
+            </td>
+            <td>
+              <span class="amount-val positive">₹{{ sal.hra | number:'1.2-2' }}</span>
+            </td>
+            <td>
+              <span class="amount-val negative">₹{{ sal.deductions | number:'1.2-2' }}</span>
+            </td>
+            <td>
+              <span class="amount-val total">₹{{ sal.inHandSalary | number:'1.2-2' }}</span>
+            </td>
+            <td>
+              <div class="action-buttons">
+                <button class="action-btn edit" (click)="openEditForm(sal)" title="Edit Payroll">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="16 3 21 8 8 21 3 21 3 16 16 3"></polygon></svg>
+                  Edit
+                </button>
+                <button class="action-btn delete" (click)="deleteSalary(sal.id)" title="Delete Payroll">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                  Delete
+                </button>
+              </div>
+            </td>
+          </tr>
+          
+          <!-- Empty State fallback -->
+          <tr *ngIf="salariesList.length === 0">
+            <td colspan="7" class="empty-row">
+              <div class="empty-state">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="empty-icon"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12" y2="18"></line><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+                <h3>No Payroll Records</h3>
+                <p>Add a new employee salary record to configure payouts.</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="pagination-footer" *ngIf="salariesList.length > 0">
+      <span class="pagination-info">Page {{ currentPage }}</span>
+      <div class="pagination-actions">
+        <button class="pag-btn" [disabled]="currentPage === 1" (click)="prevPage()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          Previous
+        </button>
+        <button class="pag-btn" [disabled]="!hasNextPage" (click)="nextPage()">
+          Next
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

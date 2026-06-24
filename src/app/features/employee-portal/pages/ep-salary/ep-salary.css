@@ -1,0 +1,30 @@
+.ep-page { padding: 28px 32px; }
+.page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
+.page-header h1 { font-size: 26px; font-weight: 700; color: #0f172a; margin-bottom: 4px; }
+.page-header p { color: #64748b; font-size: 14px; }
+.loading-state, .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; background: #fff; border-radius: 14px; border: 1px solid #e2e8f0; text-align: center; }
+.spinner { width: 36px; height: 36px; border: 3px solid #f1f5f9; border-top-color: #10b981; border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 14px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.empty-icon { font-size: 36px; margin-bottom: 10px; }
+.salary-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+.salary-slip-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.04); transition: transform 0.2s, box-shadow 0.2s; }
+.salary-slip-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+.slip-header { background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #bbf7d0; }
+.slip-month { display: flex; flex-direction: column; }
+.month-name { font-size: 18px; font-weight: 700; color: #064e3b; }
+.month-year { font-size: 12px; color: #047857; font-weight: 500; }
+.net-salary { font-size: 22px; font-weight: 700; color: #059669; }
+.slip-body { padding: 16px 20px; }
+.slip-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; font-size: 13px; }
+.slip-label { color: #6b7280; font-weight: 500; }
+.slip-value { font-weight: 600; color: #111827; }
+.slip-value.positive { color: #059669; }
+.slip-value.negative { color: #dc2626; }
+.slip-divider { border-top: 1px dashed #e5e7eb; margin: 8px 0; }
+.slip-row.total .slip-label { color: #111827; font-weight: 700; }
+.total-value { font-size: 16px; color: #059669; font-weight: 700; }
+.pagination { display: flex; justify-content: center; align-items: center; gap: 14px; margin-top: 20px; }
+.page-btn { padding: 7px 16px; border: 1px solid #d1d5db; background: #fff; border-radius: 7px; font-size: 13px; font-weight: 500; cursor: pointer; color: #374151; transition: all 0.2s; }
+.page-btn:hover:not(:disabled) { background-color: #f0fdf4; border-color: #10b981; color: #065f46; }
+.page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.page-info { font-size: 13px; font-weight: 600; color: #374151; }

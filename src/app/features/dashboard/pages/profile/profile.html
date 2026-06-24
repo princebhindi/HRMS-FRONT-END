@@ -1,0 +1,91 @@
+<div class="profile-container">
+  <div class="profile-header">
+    <h1>My Profile</h1>
+    <p>Manage your account credentials and system authorization details.</p>
+  </div>
+
+  @if (isLoading) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading profile details...</p>
+    </div>
+  } @else if (errorMessage) {
+    <div class="error-state">
+      <span class="error-icon">⚠️</span>
+      <p>{{ errorMessage }}</p>
+      <button class="retry-btn" (click)="loadProfile()">Retry</button>
+    </div>
+  } @else if (userProfile) {
+    <div class="profile-card">
+      <div class="profile-banner">
+        <div class="profile-avatar">
+          {{ userProfile.userName?.substring(0, 1).toUpperCase() }}
+        </div>
+        <div class="profile-meta">
+          <h2>{{ userProfile.userName }}</h2>
+          <span class="badge-role">{{ userProfile.role || 'User' }}</span>
+        </div>
+      </div>
+
+      <form class="profile-form" (submit)="$event.preventDefault(); updateProfile()">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <div class="input-wrapper disabled">
+              <span class="input-icon">👤</span>
+              <input 
+                type="text" 
+                id="username" 
+                [value]="userProfile.userName" 
+                disabled 
+              />
+            </div>
+            <small class="helper-text">Username cannot be changed after registration.</small>
+          </div>
+
+          <div class="form-group">
+            <label for="role">System Role</label>
+            <div class="input-wrapper disabled">
+              <span class="input-icon">🛡️</span>
+              <input 
+                type="text" 
+                id="role" 
+                [value]="userProfile.role || 'User'" 
+                disabled 
+              />
+            </div>
+            <small class="helper-text">System roles are managed by system administrators.</small>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="password">Change Password</label>
+            <div class="input-wrapper">
+              <span class="input-icon">🔑</span>
+              <input 
+                type="password" 
+                id="password" 
+                [(ngModel)]="userProfile.password" 
+                name="password"
+                placeholder="Enter new password" 
+                required 
+              />
+            </div>
+            <small class="helper-text">Update your account password to secure your dashboard.</small>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="submit-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+              <polyline points="17 21 17 13 7 13 7 21" />
+              <polyline points="7 3 7 8 15 8" />
+            </svg>
+            <span>Save Profile Updates</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  }
+</div>
