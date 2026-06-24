@@ -26,13 +26,19 @@ export class Employees implements OnInit {
   // Form State
   public showForm: boolean = false;
   public isEditMode: boolean = false;
+  public selectedFile: File | null = null;
+  
   public employeeForm: any = {
     id: '',
     name: '',
     lastName: '',
     mobile: '',
     email: '',
-    deptId: ''
+    deptId: '',
+    role: 'Employee',
+    userName: '',
+    password: '',
+    documentType: ''
   };
 
   ngOnInit(): void {
@@ -98,31 +104,49 @@ export class Employees implements OnInit {
   openAddForm(): void {
     this.showForm = true;
     this.isEditMode = false;
+    this.selectedFile = null;
     this.employeeForm = {
       id: '',
       name: '',
       lastName: '',
       mobile: '',
       email: '',
-      deptId: ''
+      deptId: '',
+      role: 'Employee',
+      userName: '',
+      password: '',
+      documentType: ''
     };
   }
 
   openEditForm(emp: any): void {
     this.showForm = true;
     this.isEditMode = true;
+    this.selectedFile = null;
     this.employeeForm = {
       id: emp.id,
       name: emp.name,
       lastName: emp.lastName,
       mobile: emp.mobile,
       email: emp.email,
-      deptId: emp.deptId || ''
+      deptId: emp.deptId || '',
+      role: emp.role || 'Employee',
+      userName: '',
+      password: '',
+      documentType: ''
     };
   }
 
   closeForm(): void {
     this.showForm = false;
+    this.selectedFile = null;
+  }
+
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+    }
   }
 
   saveEmployee(): void {
@@ -143,17 +167,45 @@ export class Employees implements OnInit {
         }
       });
     } else {
+      if (!this.employeeForm.userName || !this.employeeForm.password) {
+        alert("Username and Password are required to register a new employee login!");
+        return;
+      }
+
       const payload = { ...this.employeeForm };
       delete payload.id; // Let backend generate ID
+      const docType = payload.documentType;
+      delete payload.documentType;
 
       this.employeeService.addEmployee(payload).subscribe({
         next: (res: any) => {
-          alert("Employee added successfully!");
-          this.showForm = false;
-          this.loadEmployees();
+          // Check if a document is selected and need to upload it
+          if (res && res.data && res.data.id && this.selectedFile && docType) {
+            this.employeeService.uploadEmployeeDocument(res.data.id, docType, this.selectedFile).subscribe({
+              next: (docRes: any) => {
+                alert("Employee, User Credentials, and Document registered successfully!");
+                this.showForm = false;
+                this.selectedFile = null;
+                this.loadEmployees();
+              },
+              error: (docErr: any) => {
+                console.error("Error uploading document", docErr);
+                alert("Employee and User registered, but document upload failed.");
+                this.showForm = false;
+                this.selectedFile = null;
+                this.loadEmployees();
+              }
+            });
+          } else {
+            alert("Employee and User registered successfully!");
+            this.showForm = false;
+            this.selectedFile = null;
+            this.loadEmployees();
+          }
         },
         error: (err: any) => {
           console.error("Error adding employee", err);
+          alert("Error registering employee: " + (err.error?.message || err.message));
         }
       });
     }

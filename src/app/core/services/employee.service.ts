@@ -29,4 +29,12 @@ export class EmployeeService {
   deleteEmployee(id: string): Observable<any> {
     return this.http.delete(`${this.apiurl}/${id}`);
   }
+
+  uploadEmployeeDocument(empId: string, documentType: string, file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('empId', empId);
+    formData.append('documentType', documentType);
+    formData.append('file', file);
+    return this.http.post(`${environment.apiUrl}/EmployeeDocuments`, formData);
+  }
 }

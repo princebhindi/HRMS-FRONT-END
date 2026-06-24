@@ -38,13 +38,59 @@
         <label for="mobile">Mobile Number</label>
         <input type="text" id="mobile" name="mobile" [(ngModel)]="employeeForm.mobile" placeholder="e.g. +91 9876543210">
       </div>
-      <div class="form-group full-width">
+      <div class="form-group">
         <label for="deptId">Department Assignment</label>
         <select id="deptId" name="deptId" [(ngModel)]="employeeForm.deptId">
           <option value="">Unassigned</option>
           <option *ngFor="let dept of departmentsList" [value]="dept.id">{{ dept.name || dept.departmentName }}</option>
         </select>
       </div>
+      <div class="form-group">
+        <label for="role">System Role <span class="required">*</span></label>
+        <select id="role" name="role" [(ngModel)]="employeeForm.role" required>
+          <option value="Employee">Employee</option>
+          <option value="Admin">Admin</option>
+        </select>
+      </div>
+
+      <!-- Account Registration section for new employee -->
+      <div class="form-section-title full-width" *ngIf="!isEditMode">
+        <h3>Login Credentials</h3>
+        <p>Set up username and password for the employee to access their portal.</p>
+      </div>
+      
+      <div class="form-group" *ngIf="!isEditMode">
+        <label for="userName">Login Username <span class="required">*</span></label>
+        <input type="text" id="userName" name="userName" [(ngModel)]="employeeForm.userName" [required]="!isEditMode" placeholder="e.g. rahul_sharma">
+      </div>
+      
+      <div class="form-group" *ngIf="!isEditMode">
+        <label for="password">Login Password <span class="required">*</span></label>
+        <input type="password" id="password" name="password" [(ngModel)]="employeeForm.password" [required]="!isEditMode" placeholder="Enter secure password">
+      </div>
+
+      <!-- Document Onboarding section for new employee -->
+      <div class="form-section-title full-width" *ngIf="!isEditMode">
+        <h3>Onboarding Document</h3>
+        <p>Upload files like ID proof, resume, or contact details.</p>
+      </div>
+      
+      <div class="form-group" *ngIf="!isEditMode">
+        <label for="documentType">Document Type</label>
+        <select id="documentType" name="documentType" [(ngModel)]="employeeForm.documentType">
+          <option value="">No Document</option>
+          <option value="Aadhaar Card">Aadhaar Card / ID Proof</option>
+          <option value="PAN Card">PAN Card</option>
+          <option value="Resume">Resume / CV</option>
+          <option value="Offer Letter">Offer Letter</option>
+        </select>
+      </div>
+      
+      <div class="form-group" *ngIf="!isEditMode && employeeForm.documentType">
+        <label for="documentFile">Select Document File <span class="required">*</span></label>
+        <input type="file" id="documentFile" (change)="onFileSelected($event)" accept=".jpg,.jpeg,.png,.pdf" [required]="!isEditMode && employeeForm.documentType">
+      </div>
+
       <div class="form-actions full-width">
         <button type="button" class="btn btn-cancel" (click)="closeForm()">Cancel</button>
         <button type="submit" class="btn btn-save">{{ isEditMode ? 'Update Profile' : 'Save Employee' }}</button>
